@@ -1,11 +1,11 @@
 <form class="my-6" [formGroup]="loginForm" (ngSubmit)="submit(loginForm)">
-  <div class="flex flex-col gap-4 sm:flex-row">
+  <div class="flex flex-col gap-y-4 sm:flex-row sm:gap-x-12 sm:px-6">
     <ion-input
       type="email"
       fill="solid"
       label="Correo electrónico"
       labelPlacement="floating"
-      helperText="Ingresa tú correo electrónico"
+      helperText="Ingresa tu correo electrónico"
       errorText="Correo electrónico inválido"
       email
       clearInput
@@ -19,20 +19,26 @@
         fill="solid"
         label="Contraseña"
         labelPlacement="floating"
-        helperText="Ingresa tú contraseña"
+        helperText="Ingresa tu contraseña"
         mode="ios"
-        errorText="La contraseña debe tener más de 8 carácteres"
+        errorText="La contraseña debe tener al menos 8 carácteres"
         formControlName="password"></ion-input>
     </app-show-hide-password>
     <!-- <ion-toggle>Mostrar contraseña</ion-toggle> -->
   </div>
-  <ion-button class="mt-4" fill="outline" shape="round" expand="block" type="submit" [disabled]="loginForm.invalid"
+  <ion-button
+    class="mt-5 sm:mx-48"
+    fill="outline"
+    shape="round"
+    expand="block"
+    type="submit"
+    [disabled]="loginForm.invalid"
     >Iniciar sesión</ion-button
   >
 </form>
-<div class="flex flex-wrap gap-x-4 gap-y-1">
+<div class="flex flex-wrap gap-x-3 gap-y-1">
   <p>¿Has olvidado tu contraseña?</p>
-  <a routerLink="forgot" class="text-blue-700 font-semibold">Recuperar contraseña</a>
+  <a routerLink="forgot" class="text-blue-700 font-semibold underline">Recuperar contraseña</a>
 </div>
 <h5 class="text-center text-xl font-medium my-4">Inicia sesión con</h5>
 <div class="flex flex-col justify-around text-base gap-y-3 sm:flex-row mb-3">
@@ -88,3 +94,8 @@
     </svg>
   </button>
 </div>
+<p class="my-6 text-center opacity-[.85]">
+  Si deseas trabajar como conductor debes registrarte
+  <a (click)="segment.emit('register')" class="text-blue-700 font-semibold underline hover:cursor-pointer">aquí</a> y
+  brindar datos adicionales
+</p>

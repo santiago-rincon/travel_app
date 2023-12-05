@@ -3,7 +3,7 @@
     <h1 class="text-4xl p-0 font-semibold text-center text-white">¡Bienvenido!</h1>
   </div>
   <section class="px-5">
-    <ion-segment value="login" (ionChange)="handleChange($event)">
+    <ion-segment value="register" (ionChange)="handleChange($event)">
       <ion-segment-button value="login" layout="icon-end">
         <ion-label>Inicia sesión</ion-label>
       </ion-segment-button>
@@ -11,8 +11,8 @@
         <ion-label>Regístrate</ion-label>
       </ion-segment-button>
     </ion-segment>
-    @if (viewSelected === 'login') {
-      <app-login-form />
+    @if (viewSelected() === 'login') {
+      <app-login-form (segment)="changeValue($event)" />
     } @else {
       <app-register-form />
     }

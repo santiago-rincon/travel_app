@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ShowHidePasswordComponent } from '@components/show-hide-password/show-hide-password.component';
@@ -13,12 +13,14 @@ import { IonicModule } from '@modules/ionic.module';
   imports: [IonicModule, ReactiveFormsModule, RouterLink, IconsModule, ShowHidePasswordComponent],
 })
 export class LoginFormComponent {
+  @Output() readonly segment = new EventEmitter<string>();
   private formBuilder = inject(FormBuilder);
   private alertController = inject(AlertController);
   loginForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
+
   submit(form: FormGroup) {
     if (form.invalid) {
       this.presentAlert();

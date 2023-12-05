@@ -1,3 +1,113 @@
-<p>
-  register-form works!
-</p>
+<form class="my-6" [formGroup]="registerForm" (ngSubmit)="submit(registerForm)">
+  <div class="flex flex-col gap-y-4 place-items-baseline sm:px-6">
+    <ion-input
+      type="email"
+      fill="solid"
+      label="Correo electrónico"
+      labelPlacement="floating"
+      helperText="Ingresa tu correo electrónico"
+      errorText="Correo electrónico inválido"
+      email
+      clearInput
+      mode="ios"
+      formControlName="email"></ion-input>
+    <app-show-hide-password
+      class="flex w-full items-center"
+      [showButton]="registerForm.controls['password'].value.length > 0">
+      <ion-input
+        type="password"
+        fill="solid"
+        label="Contraseña"
+        labelPlacement="floating"
+        helperText="Ingresa tu contraseña"
+        mode="ios"
+        errorText="La contraseña debe tener al menos 8 carácteres"
+        formControlName="password"></ion-input>
+    </app-show-hide-password>
+    <app-show-hide-password
+      class="flex w-full items-center"
+      [showButton]="registerForm.controls['passwordRepeated'].value.length > 0">
+      <ion-input
+        type="password"
+        fill="solid"
+        label="Repite tu contraseña"
+        labelPlacement="floating"
+        helperText="Repite tu contraseña"
+        mode="ios"
+        errorText="La contraseña debe tener al menos 8 carácteres"
+        formControlName="passwordRepeated"></ion-input>
+    </app-show-hide-password>
+    <ion-toggle formControlName="isDriver" (ionChange)="onToggleChange($event.detail.checked)"
+      >¿Deseas registrarte como conductor?</ion-toggle
+    >
+    @if (registerForm.controls['isDriver'].value) {
+      <ion-input
+        type="text"
+        fill="solid"
+        label="Nombres completos"
+        labelPlacement="floating"
+        helperText="Ingresa tus nombre completos"
+        errorText="El nombre es requerido"
+        clearInput
+        mode="ios"
+        formControlName="names"></ion-input>
+      <ion-input
+        type="text"
+        fill="solid"
+        label="Apellidos"
+        labelPlacement="floating"
+        helperText="Ingresa tus apellidos"
+        errorText="Los apellidos son requeridos"
+        clearInput
+        mode="ios"
+        formControlName="lastNames"></ion-input>
+      <ion-input
+        type="text"
+        fill="solid"
+        label="Número de cédula (sin puntos o espacios)"
+        labelPlacement="floating"
+        helperText="Ingresa tu cédula (sin puntos o espacios)"
+        errorText="Formato de cédula inválido"
+        clearInput
+        mode="ios"
+        formControlName="cc"></ion-input>
+      <ion-input
+        type="tel"
+        fill="solid"
+        label="Número de celular (sin guiones o espacios)"
+        labelPlacement="floating"
+        helperText="Ingresa tu número de celular (sin guiones o espacios)"
+        errorText="Formato de celular inválido"
+        clearInput
+        mode="ios"
+        formControlName="phoneNumber"></ion-input>
+      <ion-select
+        label="Tipo de vehículo"
+        label-placement="floating"
+        formControlName="vehicle"
+        class="border-b border-solid border-[#c8c7cc]">
+        <ion-select-option value="Carro">Carro</ion-select-option>
+        <ion-select-option value="Moto">Moto</ion-select-option>
+      </ion-select>
+      <ion-input
+        type="text"
+        fill="solid"
+        label="Placa del vehículo (sin guiones o espacios)"
+        labelPlacement="floating"
+        helperText="Ingresa la placa de tú vehículo (sin guiones o espacios)"
+        errorText="Formato de placa inválido"
+        clearInput
+        mode="ios"
+        formControlName="plates"></ion-input>
+    }
+  </div>
+  <ion-button
+    class="mt-5 sm:mx-48"
+    fill="outline"
+    shape="round"
+    expand="block"
+    type="submit"
+    [disabled]="registerForm.invalid"
+    >Registrar</ion-button
+  >
+</form>

@@ -23,6 +23,7 @@ import {
   logoApple,
   eye,
   eyeOff,
+  alertCircle,
 } from 'ionicons/icons';
 import { IonIcon } from '@ionic/angular/standalone';
 
@@ -56,6 +57,7 @@ export class IconsModule {
       logoApple,
       eye,
       eyeOff,
+      alertCircle,
     });
   }
 }

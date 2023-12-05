@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, computed, signal } from '@angular/core';
 import { LoginFormComponent } from '@components/login-form/login-form.component';
 import { RegisterFormComponent } from '@components/register-form/register-form.component';
 import { SegmentCustomEvent } from '@ionic/angular';
+import { IonSegment } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
 
@@ -12,9 +13,16 @@ import { IonicModule } from '@modules/ionic.module';
   imports: [IonicModule, IconsModule, LoginFormComponent, RegisterFormComponent],
 })
 export class LoginComponent {
-  viewSelected = 'login';
+  private view = signal('register');
+  viewSelected = computed(() => this.view());
+  @ViewChild(IonSegment) ionSegment!: IonSegment;
 
-  handleChange(e: SegmentCustomEvent) {
-    this.viewSelected = e.detail.value === 'login' ? 'login' : 'register';
+  handleChange(event: SegmentCustomEvent) {
+    this.view.set(event.detail.value === 'login' ? 'login' : 'register');
+  }
+
+  changeValue(value: string) {
+    this.ionSegment.value = value;
+    this.view.set(value);
   }
 }

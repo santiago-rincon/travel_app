@@ -39,6 +39,8 @@ import {
   IonSpinner,
   IonSegment,
   IonSegmentButton,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/angular/standalone';
 
 @NgModule({
@@ -83,6 +85,8 @@ import {
     IonSpinner,
     IonSegment,
     IonSegmentButton,
+    IonSelect,
+    IonSelectOption,
   ],
   exports: [
     IonApp,
@@ -124,6 +128,8 @@ import {
     IonSpinner,
     IonSegment,
     IonSegmentButton,
+    IonSelect,
+    IonSelectOption,
   ],
 })
 export class IonicModule {}
