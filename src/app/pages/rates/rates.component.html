@@ -1,0 +1,11 @@
+<ion-content>
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Tarifas del servicio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <app-list
+    [title]="'Tarifas para el año ' + year"
+    voidData="Error al obtener la lista de precios"
+    [items]="ratesService" />
+</ion-content>

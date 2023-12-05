@@ -1,0 +1,10 @@
+<ion-content>
+  <app-top-card [firstName]="firstName" [greeting]="greeting" [avatar]="avatar" [titleApp]="titleApp" />
+  <section class="mt-4 mx-2">
+    <app-interactive-list
+      title="Direcciones guardadas"
+      [items]="directions"
+      voidData="No tienes direcciones guardadas"
+      mainPath="travel" />
+  </section>
+</ion-content>

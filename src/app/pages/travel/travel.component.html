@@ -1,0 +1,30 @@
+<ion-content>
+  <ion-fab slot="fixed" vertical="start" horizontal="end">
+    <ion-fab-button size="small">
+      <ion-icon name="menu"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="botton">
+      <ion-fab-button (click)="openModal()">
+        <ion-icon name="arrow-up-circle"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+    <ion-fab-list side="start">
+      <ion-fab-button (click)="getMyPosition()">
+        <ion-icon name="locate"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+  <ion-button
+    class="fixed z-10 bottom-3 w-4/5 left-1/2 ms-[-40%] aria-disabled:opacity-75"
+    shape="round"
+    (click)="orderService()"
+    [disabled]="calcRouteInProgress">
+    Pedir servicio
+    @if (calcRouteInProgress) {
+      <ion-spinner name="dots"></ion-spinner>
+    } @else {
+      <ion-icon slot="end" name="car"></ion-icon>
+    }
+  </ion-button>
+  <app-maps />
+</ion-content>

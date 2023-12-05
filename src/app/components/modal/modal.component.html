@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>¿A dónde deseas ir hoy?</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="medium" (click)="closeModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen>
+  <div class="bg-gray-300/20 shadow-xl py-3">
+    <form class="grid place-content-center grid-cols-1 gap-y-4 p-3" [formGroup]="formDirections">
+      <ion-input
+        autocorrect="on"
+        formControlName="origin"
+        name="origin"
+        label="Origen"
+        labelPlacement="stacked"
+        placeholder="Tu ubicación"
+        style="min-height: 40px; --highlight-color: gray"
+        clearInput
+        fill="outline"
+        (ionInput)="handleInput($event)"
+        (ionFocus)="changeFocus($event)"
+        (ionBlur)="changeFocus($event)" />
+      <ion-input
+        autocorrect="on"
+        formControlName="destination"
+        name="destination"
+        label="Destino"
+        labelPlacement="stacked"
+        placeholder="Calle 16 #2-20"
+        style="min-height: 40px; --highlight-color: gray"
+        clearInput
+        fill="outline"
+        (ionInput)="handleInput($event)"
+        (ionFocus)="changeFocus($event)"
+        (ionBlur)="changeFocus($event)" />
+    </form>
+    <ion-button color="primary" class="block mx-5" (click)="manualUbication()"
+      >Seleccionar ubicaciones manual</ion-button
+    >
+  </div>
+  @switch (focusTarget) {
+    @case ('origin') {
+      <ion-list>
+        @for (result of originResults; track $index) {
+          <ion-item button lines="full" (click)="selectUbication(result.direction, result.coords)">
+            <ion-icon slot="start" name="locate" color="secondary"></ion-icon>
+            <ion-label>{{ result.direction }}</ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+    @case ('destination') {
+      <ion-list>
+        @for (result of destinationResults; track $index) {
+          <ion-item button lines="full" (click)="selectUbication(result.direction, result.coords)">
+            <ion-icon slot="start" name="locate" color="secondary"></ion-icon>
+            <ion-label>{{ result.direction }}</ion-label>
+          </ion-item>
+        } @empty {
+          <ion-item button lines="full">
+            <ion-label>{{ defaultTextResults }}</ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    }
+    @default {}
+  }
+</ion-content>

@@ -1,0 +1,14 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom" class="lg:hidden">
+    @for (menu of menus; track $index) {
+      <ion-tab-button [routerLink]="menu.path" routerLinkActive="active">
+        <ion-icon [name]="menu.icon"></ion-icon>
+        {{ menu.title }}
+      </ion-tab-button>
+    }
+    <ion-tab-button (click)="onClick()">
+      <ion-icon name="ellipsis-horizontal"></ion-icon>
+      Más
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

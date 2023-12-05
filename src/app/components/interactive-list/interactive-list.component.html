@@ -1,0 +1,44 @@
+<ion-list class="rounded-2xl">
+  <ion-list-header>
+    <ion-label class="font-bold text-lg">{{ title }}</ion-label>
+  </ion-list-header>
+  @for (item of items; track item.boldText; let i = $index) {
+    <div #listItems class="animate__animated animate__faster">
+      <ion-item-sliding>
+        <ion-item button lines="full">
+          @for (option of item.itemOptions; track $index) {
+            <ion-button
+              [slot]="option.side"
+              [color]="option.color"
+              class="hidden lg:block"
+              (click)="onSwipe(i, option.side)">
+              <ion-icon slot="icon-only" [name]="option.slideIcon"></ion-icon>
+            </ion-button>
+          }
+
+          <ion-label (click)="createTravel(item.coords)">
+            <strong class="block text-sm">{{ item.boldText }}</strong>
+            <p class="text-xs">{{ item.normalText }}</p>
+          </ion-label>
+          @if (item.icon) {
+            <ion-icon
+              [slot]="item.icon.slot"
+              [name]="item.icon.name"
+              class="border border-gray-500 dark:border-gray-200 p-1 rounded-full"></ion-icon>
+          }
+        </ion-item>
+        @for (option of item.itemOptions; track $index) {
+          <ion-item-options [side]="option.side" (ionSwipe)="onSwipe(i, option.side)" (click)="onSwipe(i, option.side)">
+            <ion-item-option expandable [color]="option.color || 'danger'" class="lg:hidden">
+              <ion-icon slot="icon-only" [name]="option.slideIcon"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        }
+      </ion-item-sliding>
+    </div>
+  } @empty {
+    <ion-item class="[--inner-border-width:0px]">
+      <ion-label> {{ voidData }} </ion-label>
+    </ion-item>
+  }
+</ion-list>

@@ -1,0 +1,50 @@
+<ion-split-pane when="(min-width: 1024px)" contentId="main" class="[--side-max-width:360px;]">
+  <ion-menu contentId="main" menuId="main-menu" side="start">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>{{ titleApp }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="changeTheme()">
+            @if (!isDark) {
+              <ion-icon slot="icon-only" name="moon" #toggle></ion-icon>
+            } @else {
+              <ion-icon slot="icon-only" name="sunny" #toggle></ion-icon>
+            }
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        @for (menuLg of menusLgScreen; track $index) {
+          <ion-item
+            [button]="true"
+            routerLinkActive="active"
+            [routerLink]="menuLg.path"
+            lines="none"
+            class="hidden lg:block"
+            (click)="menuCtrl.toggle('main-menu')">
+            <ion-icon slot="start" [name]="menuLg.icon"></ion-icon>
+            <ion-label> {{ menuLg.title }} </ion-label>
+          </ion-item>
+        }
+        @for (menu of menus; track $index) {
+          <ion-item
+            [button]="true"
+            routerLinkActive="active"
+            [routerLink]="menu.path"
+            lines="none"
+            (click)="menuCtrl.toggle('main-menu')">
+            <ion-icon slot="start" [name]="menu.icon"></ion-icon>
+            <ion-label> {{ menu.title }} </ion-label>
+          </ion-item>
+        }
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <div id="main" class="lg:border-s lg:border-white/70 dark:border-white/20 w-full">
+    <ng-content></ng-content>
+    <app-tabs />
+  </div>
+</ion-split-pane>

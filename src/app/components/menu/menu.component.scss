@@ -1,0 +1,21 @@
+ion-menu::part(container) {
+  border-radius: 0 20px 20px 0;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.active {
+  border-left: 8px solid;
+  color: var(--ion-color-primary);
+  & ion-icon {
+    color: var(--ion-color-primary);
+  }
+}
+
+@media (width >= 1024px) {
+  ion-menu::part(container) {
+    border-radius: 0;
+  }
+}

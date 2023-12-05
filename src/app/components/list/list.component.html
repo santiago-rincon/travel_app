@@ -1,0 +1,20 @@
+<ion-list-header>
+  <ion-label class="font-bold text-lg">{{ title }}</ion-label>
+</ion-list-header>
+<ion-list class="grid grid-cols-auto-fit">
+  @for (item of items; track $index) {
+    <ion-item lines="full">
+      <ion-label>
+        <strong class="block text-sm">{{ item.boldText }}</strong>
+        <p class="text-xs">{{ item.normalText }}</p>
+      </ion-label>
+      @if (item.icon) {
+        <ion-icon [slot]="item.icon.slot" [name]="item.icon.name"></ion-icon>
+      }
+    </ion-item>
+  } @empty {
+    <ion-item class="[--inner-border-width:0px]">
+      <ion-label> {{ voidData }} </ion-label>
+    </ion-item>
+  }
+</ion-list>
