@@ -1,11 +1,11 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { AuthService } from '@services/auth.service';
+import { AuthFireService } from '@services/auth-fire.service';
 
 export const loginGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const authService = inject(AuthService);
+  const authService = inject(AuthFireService);
   if (authService.isLogin()) {
     return true;
   } else {

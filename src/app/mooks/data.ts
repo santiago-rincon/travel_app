@@ -1,4 +1,4 @@
-import { InteractiveItems, SavedDirections, StaticItems } from '@interfaces/interfaces';
+import { InteractiveItems, SavedDirections, StaticItems } from 'app/schemas/interfaces';
 export const titleApp = 'Travel App';
 
 export const firstName = 'Santiago';

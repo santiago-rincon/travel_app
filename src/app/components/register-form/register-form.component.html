@@ -37,7 +37,7 @@
         errorText="La contraseña debe tener al menos 8 carácteres"
         formControlName="passwordRepeated"></ion-input>
     </app-show-hide-password>
-    <ion-toggle formControlName="isDriver" (ionChange)="onToggleChange($event.detail.checked)"
+    <ion-toggle formControlName="isDriver" (ionChange)="onToggleChange($event.detail.value)"
       >¿Deseas registrarte como conductor?</ion-toggle
     >
     @if (registerForm.controls['isDriver'].value) {
@@ -107,7 +107,7 @@
     shape="round"
     expand="block"
     type="submit"
-    [disabled]="registerForm.invalid"
+    [disabled]="false && registerForm.invalid"
     >Registrar</ion-button
   >
 </form>

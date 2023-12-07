@@ -2,7 +2,7 @@ import { FormsModule } from '@angular/forms';
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
-import { Menu } from '@interfaces/interfaces';
+import { Menu } from 'app/schemas/interfaces';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuController } from '@ionic/angular/standalone';
 import { TabsComponent } from '@components/tabs/tabs.component';

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SearchResults } from '@interfaces/interfaces';
+import { SearchResults } from 'app/schemas/interfaces';
 import { ModalController } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';

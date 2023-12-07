@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, QueryList, Renderer2, ViewChildren, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { InteractiveItems, SavedDirections, Slot } from '@interfaces/interfaces';
+import { InteractiveItems, SavedDirections, Slot } from 'app/schemas/interfaces';
 import { ToastController } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';

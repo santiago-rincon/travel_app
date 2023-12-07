@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ListComponent } from '@components/list/list.component';
-import { StaticItems } from '@interfaces/interfaces';
+import { StaticItems } from 'app/schemas/interfaces';
 import { IonicModule } from '@modules/ionic.module';
 import { rates2023 } from '@mooks/data';
 

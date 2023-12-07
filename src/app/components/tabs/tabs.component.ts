@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Menu } from '@interfaces/interfaces';
+import { Menu } from 'app/schemas/interfaces';
 import { MenuController } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';

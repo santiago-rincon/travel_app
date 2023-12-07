@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { StaticItems } from '@interfaces/interfaces';
+import { StaticItems } from 'app/schemas/interfaces';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
 

@@ -3,6 +3,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ShowHidePasswordComponent } from '@components/show-hide-password/show-hide-password.component';
 import { AlertController } from '@ionic/angular';
 import { IonicModule } from '@modules/ionic.module';
+import {
+  type DriverRegisterSchemaType,
+  type RegisterSchemaType,
+  driverRegisterShema,
+  registerShema,
+} from '@schemas/form-checker';
+import { ZodError } from 'zod';
 
 @Component({
   standalone: true,
@@ -27,17 +34,55 @@ export class RegisterFormComponent {
   });
 
   submit(form: FormGroup) {
-    if (form.invalid) {
-      this.presentAlert();
-      return;
+    try {
+      const { email, password, passwordRepeated, isDriver } = form.controls;
+      const basicData: RegisterSchemaType = registerShema.parse({
+        email: email.value,
+        password: password.value,
+        passwordRepeated: passwordRepeated.value,
+        isDriver: isDriver.value,
+      });
+      try {
+        const { names, lastNames, cc, phoneNumber, vehicle, plates } = form.controls;
+        let driverData: DriverRegisterSchemaType | undefined = undefined;
+        if (basicData.isDriver) {
+          driverData = driverRegisterShema.parse({
+            names: names.value,
+            lastNames: lastNames.value,
+            cc: cc.value,
+            phoneNumber: phoneNumber.value,
+            vehicle: vehicle.value,
+            plates: plates.value,
+          });
+        }
+        const finalData = { ...basicData, ...driverData };
+        //TODO: Lógica para el registroa
+      } catch (error) {
+        if (!(error instanceof ZodError)) {
+          this.presentAlert('Ha ocurrido un error inesperado');
+        } else {
+          this.presentAlert(error.issues[0].message);
+          const errorField = this.registerForm.get(error.issues[0].path[0] as string);
+          errorField?.markAsTouched();
+          errorField?.setErrors(Validators.required);
+        }
+      }
+    } catch (error) {
+      if (!(error instanceof ZodError)) {
+        this.presentAlert('Ha ocurrido un error inesperado');
+      } else {
+        this.presentAlert(error.issues[0].message);
+        const errorField = this.registerForm.get(error.issues[0].path[0] as string);
+        errorField?.markAsTouched();
+        errorField?.setErrors(Validators.required);
+      }
     }
-    console.log(form);
   }
 
-  private async presentAlert() {
+  private async presentAlert(message: string) {
     const alert = await this.alertController.create({
       header: 'Error en el formulario',
-      message: 'Revisa que todos los campos estén completos o sean válidos',
+      message,
       buttons: ['Ok'],
     });
     await alert.present();

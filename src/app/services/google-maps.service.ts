@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable, Output, Renderer2 } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Geolocation } from '@capacitor/geolocation';
-import { TravelDirections } from '@interfaces/interfaces';
+import { TravelDirections } from 'app/schemas/interfaces';
 import { BehaviorSubject } from 'rxjs';
 
 declare var google: any;

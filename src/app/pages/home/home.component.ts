@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { InteractiveListComponent } from '@components/interactive-list/interactive-list.component';
 import { TopCardComponent } from '@components/top-card/top-card.component';
-import { SavedDirections } from '@interfaces/interfaces';
+import { SavedDirections } from 'app/schemas/interfaces';
 import { IonicModule } from '@modules/ionic.module';
 import { firstName, directionSaved, titleApp } from '@mooks/data';
 

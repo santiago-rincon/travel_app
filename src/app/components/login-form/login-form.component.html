@@ -1,6 +1,7 @@
 <form class="my-6" [formGroup]="loginForm" (ngSubmit)="submit(loginForm)">
   <div class="flex flex-col gap-y-4 sm:flex-row sm:gap-x-12 sm:px-6">
     <ion-input
+      #inputFields
       type="email"
       fill="solid"
       label="Correo electrónico"
@@ -10,11 +11,13 @@
       email
       clearInput
       mode="ios"
-      formControlName="email"></ion-input>
+      formControlName="email"
+      name="email"></ion-input>
     <app-show-hide-password
       class="flex w-full items-center"
       [showButton]="loginForm.controls['password'].value.length > 0">
       <ion-input
+        #inputFields
         type="password"
         fill="solid"
         label="Contraseña"
@@ -22,7 +25,8 @@
         helperText="Ingresa tu contraseña"
         mode="ios"
         errorText="La contraseña debe tener al menos 8 carácteres"
-        formControlName="password"></ion-input>
+        formControlName="password"
+        name="password"></ion-input>
     </app-show-hide-password>
     <!-- <ion-toggle>Mostrar contraseña</ion-toggle> -->
   </div>
