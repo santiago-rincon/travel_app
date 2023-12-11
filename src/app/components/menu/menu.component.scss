@@ -7,7 +7,7 @@ ion-menu::part(container) {
 }
 
 .active {
-  border-left: 8px solid;
+  border-left: 5px solid;
   color: var(--ion-color-primary);
   & ion-icon {
     color: var(--ion-color-primary);

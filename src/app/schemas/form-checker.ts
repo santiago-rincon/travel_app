@@ -15,25 +15,27 @@ export const loginSchema = z.object({
     .min(8, { message: 'La contraseña debe contener al menos 8 carácteres' }),
 });
 
-export const registerShema = z.object({
-  email: z
-    .string({
-      required_error: 'El correo electrónico es requerido',
-    })
-    .email({ message: 'El correo electrónico no es válido' })
-    .trim(),
-  password: z
-    .string({
-      required_error: 'El campo "Contraseña" es requerido',
-    })
-    .min(8, { message: 'El campo "Contraseña" debe contener al menos 8 carácteres' }),
-  passwordRepeated: z
-    .string({
-      required_error: 'El campo "Repite tu contraseña" es requerido',
-    })
-    .min(8, { message: 'El campo "Repite tu contraseña" debe contener al menos 8 carácteres' }),
-  isDriver: z.boolean({ invalid_type_error: 'El campo "Deseas registrarte como conductor" debe ser un booleano' }),
-});
+export const registerShema = z
+  .object({
+    email: z
+      .string({
+        required_error: 'El correo electrónico es requerido',
+      })
+      .email({ message: 'El correo electrónico no es válido' })
+      .trim(),
+    password: z
+      .string({
+        required_error: 'El campo "Contraseña" es requerido',
+      })
+      .min(8, { message: 'El campo "Contraseña" debe contener al menos 8 carácteres' }),
+    passwordRepeated: z
+      .string({
+        required_error: 'El campo "Repite tu contraseña" es requerido',
+      })
+      .min(8, { message: 'El campo "Repite tu contraseña" debe contener al menos 8 carácteres' }),
+    isDriver: z.boolean({ invalid_type_error: 'El campo "Deseas registrarte como conductor" debe ser un booleano' }),
+  })
+  .refine(data => data.password === data.passwordRepeated, { message: 'Las contraseñas no coinciden' });
 
 export const driverRegisterShema = z.object({
   names: z

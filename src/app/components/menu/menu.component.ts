@@ -1,11 +1,13 @@
 import { FormsModule } from '@angular/forms';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, inject } from '@angular/core';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
 import { Menu } from 'app/schemas/interfaces';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuController } from '@ionic/angular/standalone';
 import { TabsComponent } from '@components/tabs/tabs.component';
+import { AuthFireService } from '@services/auth-fire.service';
+import { AlertsService } from '@services/alerts.service';
 
 @Component({
   standalone: true,
@@ -16,17 +18,27 @@ import { TabsComponent } from '@components/tabs/tabs.component';
 })
 export class MenuComponent implements OnInit {
   @Input() titleApp = 'Título de la App';
-  menuCtrl = inject(MenuController);
+  private menuCtrl = inject(MenuController);
+  private router = inject(Router);
+  private authService = inject(AuthFireService);
+  private alertsService = inject(AlertsService);
+  private render = inject(Renderer2);
   isDark = false;
   menusLgScreen: Menu[] = [
-    { title: 'Inicio', icon: 'home', path: 'home' },
-    { title: 'Viajar', icon: 'car', path: 'travel' },
+    { title: 'Inicio', icon: 'home', path: 'home', onClick: () => this.menuCtrl.toggle('main-menu') },
+    { title: 'Viajar', icon: 'car', path: 'travel', onClick: () => this.menuCtrl.toggle('main-menu') },
   ];
   menus: Menu[] = [
-    { title: 'Perfil', icon: 'person-circle', path: 'profile' },
-    { title: 'Tarifas', icon: 'cash', path: 'rates' },
-    { title: 'Ajustes', icon: 'settings', path: 'settings' },
-    { title: 'Información', icon: 'information-circle', path: 'information' },
+    { title: 'Perfil', icon: 'person-circle', path: 'profile', onClick: () => this.menuCtrl.toggle('main-menu') },
+    { title: 'Tarifas', icon: 'cash', path: 'rates', onClick: () => this.menuCtrl.toggle('main-menu') },
+    { title: 'Ajustes', icon: 'settings', path: 'settings', onClick: () => this.menuCtrl.toggle('main-menu') },
+    {
+      title: 'Información',
+      icon: 'information-circle',
+      path: 'information',
+      onClick: () => this.menuCtrl.toggle('main-menu'),
+    },
+    { title: 'Cerrar sesión', icon: 'log-out', onClick: () => this.signOut() },
   ];
 
   ngOnInit() {
@@ -35,18 +47,25 @@ export class MenuComponent implements OnInit {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
       const dark = prefersDark.matches;
       this.isDark = dark;
-      document.body.classList.toggle('dark', dark);
+      dark ? this.render.addClass(document.body, 'dark') : this.render.removeClass(document.body, 'dark');
       localStorage.setItem('isDark', dark.toString());
     } else {
       this.isDark = storageDark === 'true';
-      document.body.classList.toggle('dark', storageDark === 'true');
+      storageDark === 'true'
+        ? this.render.addClass(document.body, 'dark')
+        : this.render.removeClass(document.body, 'dark');
     }
   }
 
   changeTheme() {
     const isDark = !this.isDark;
     this.isDark = isDark;
-    document.body.classList.toggle('dark', isDark);
+    isDark ? this.render.addClass(document.body, 'dark') : this.render.removeClass(document.body, 'dark');
     localStorage.setItem('isDark', isDark.toString());
+  }
+
+  signOut() {
+    this.menuCtrl.toggle('main-menu');
+    this.authService.signOut();
   }
 }

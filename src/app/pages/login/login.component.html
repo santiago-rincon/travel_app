@@ -14,7 +14,7 @@
     @if (viewSelected() === 'login') {
       <app-login-form (segment)="changeValue($event)" />
     } @else {
-      <app-register-form />
+      <app-register-form (segment)="changeValue($event)" />
     }
   </section>
 </ion-content>

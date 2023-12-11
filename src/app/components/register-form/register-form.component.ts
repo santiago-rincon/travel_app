@@ -1,14 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { FirebaseError } from '@angular/fire/app';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ShowHidePasswordComponent } from '@components/show-hide-password/show-hide-password.component';
-import { AlertController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular/standalone';
 import { IonicModule } from '@modules/ionic.module';
-import {
-  type DriverRegisterSchemaType,
-  type RegisterSchemaType,
-  driverRegisterShema,
-  registerShema,
-} from '@schemas/form-checker';
+import { driverRegisterShema, registerShema } from '@schemas/form-checker';
+import { AlertsService } from '@services/alerts.service';
+import { AuthFireService } from '@services/auth-fire.service';
 import { ZodError } from 'zod';
 
 @Component({
@@ -18,8 +16,12 @@ import { ZodError } from 'zod';
   imports: [IonicModule, ShowHidePasswordComponent, ReactiveFormsModule],
 })
 export class RegisterFormComponent {
+  @Output() readonly segment = new EventEmitter<string>();
   private formBuilder = inject(FormBuilder);
-  private alertController = inject(AlertController);
+  private alertsService = inject(AlertsService);
+  private authService = inject(AuthFireService);
+  private loadingController = inject(LoadingController);
+  private readonly alertParams = { header: 'Error en el registro' };
   registerForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8)]],
@@ -33,10 +35,10 @@ export class RegisterFormComponent {
     plates: [''],
   });
 
-  submit(form: FormGroup) {
+  async submit(form: FormGroup) {
     try {
       const { email, password, passwordRepeated, isDriver } = form.controls;
-      const basicData: RegisterSchemaType = registerShema.parse({
+      registerShema.parse({
         email: email.value,
         password: password.value,
         passwordRepeated: passwordRepeated.value,
@@ -44,9 +46,8 @@ export class RegisterFormComponent {
       });
       try {
         const { names, lastNames, cc, phoneNumber, vehicle, plates } = form.controls;
-        let driverData: DriverRegisterSchemaType | undefined = undefined;
-        if (basicData.isDriver) {
-          driverData = driverRegisterShema.parse({
+        if (isDriver.value) {
+          driverRegisterShema.parse({
             names: names.value,
             lastNames: lastNames.value,
             cc: cc.value,
@@ -55,13 +56,12 @@ export class RegisterFormComponent {
             plates: plates.value,
           });
         }
-        const finalData = { ...basicData, ...driverData };
-        //TODO: Lógica para el registroa
+        this.registerUser({ email: email.value, password: password.value, isDriver: isDriver.value });
       } catch (error) {
         if (!(error instanceof ZodError)) {
-          this.presentAlert('Ha ocurrido un error inesperado');
+          this.alertsService.presentAlert({ ...this.alertParams, message: 'Ha ocurrido un error inesperado' });
         } else {
-          this.presentAlert(error.issues[0].message);
+          this.alertsService.presentAlert({ ...this.alertParams, message: error.issues[0].message });
           const errorField = this.registerForm.get(error.issues[0].path[0] as string);
           errorField?.markAsTouched();
           errorField?.setErrors(Validators.required);
@@ -69,9 +69,9 @@ export class RegisterFormComponent {
       }
     } catch (error) {
       if (!(error instanceof ZodError)) {
-        this.presentAlert('Ha ocurrido un error inesperado');
+        this.alertsService.presentAlert({ ...this.alertParams, message: 'Ha ocurrido un error inesperado' });
       } else {
-        this.presentAlert(error.issues[0].message);
+        this.alertsService.presentAlert({ ...this.alertParams, message: error.issues[0].message });
         const errorField = this.registerForm.get(error.issues[0].path[0] as string);
         errorField?.markAsTouched();
         errorField?.setErrors(Validators.required);
@@ -79,13 +79,31 @@ export class RegisterFormComponent {
     }
   }
 
-  private async presentAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Error en el formulario',
-      message,
-      buttons: ['Ok'],
+  private async registerUser({ email, password, isDriver }: { email: string; password: string; isDriver: boolean }) {
+    const loader = await this.loadingController.create({
+      animated: true,
+      message: 'Creando cuenta...',
+      spinner: 'dots',
     });
-    await alert.present();
+    loader.present();
+    try {
+      const { user } = await this.authService.registerWithEmail(email, password);
+      await this.authService.sendEmailToVerification(user);
+      if (isDriver) {
+        //TODO Registrar los datos extras en FireStore
+      }
+      this.registerForm.reset();
+      loader.dismiss();
+      this.alertsService.presentAlert({ header: 'Registro exitoso', message: 'Verifica tu correo' });
+      this.segment.emit('login');
+    } catch (error) {
+      loader.dismiss();
+      if (error instanceof FirebaseError) {
+        this.registerForm.reset();
+        const message = this.authService.verifyErrorCodes(error.code);
+        this.alertsService.presentAlert({ ...this.alertParams, message });
+      }
+    }
   }
 
   onToggleChange(checked: boolean) {

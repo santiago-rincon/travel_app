@@ -13,7 +13,7 @@
       formControlName="email"></ion-input>
     <app-show-hide-password
       class="flex w-full items-center"
-      [showButton]="registerForm.controls['password'].value.length > 0">
+      [showButton]="registerForm.controls['password'].value?.length > 0 || false">
       <ion-input
         type="password"
         fill="solid"
@@ -26,7 +26,7 @@
     </app-show-hide-password>
     <app-show-hide-password
       class="flex w-full items-center"
-      [showButton]="registerForm.controls['passwordRepeated'].value.length > 0">
+      [showButton]="registerForm.controls['passwordRepeated'].value?.length > 0 || false">
       <ion-input
         type="password"
         fill="solid"

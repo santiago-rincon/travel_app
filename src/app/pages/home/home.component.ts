@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { InteractiveListComponent } from '@components/interactive-list/interactive-list.component';
 import { TopCardComponent } from '@components/top-card/top-card.component';
 import { SavedDirections } from 'app/schemas/interfaces';
 import { IonicModule } from '@modules/ionic.module';
 import { firstName, directionSaved, titleApp } from '@mooks/data';
+import { AuthFireService } from '@services/auth-fire.service';
 
 @Component({
   standalone: true,
@@ -12,12 +13,20 @@ import { firstName, directionSaved, titleApp } from '@mooks/data';
   imports: [IonicModule, TopCardComponent, InteractiveListComponent],
 })
 export class HomeComponent {
-  firstName = firstName;
+  private authService = inject(AuthFireService);
+  firstName!: string;
   greeting = this.getGreeting();
-  avatar: string = `https://ui-avatars.com/api/?name=${firstName}`;
+  avatar!: string;
   titleApp = titleApp;
   directions: SavedDirections[] = directionSaved;
-  constructor() {}
+  constructor() {
+    const user = this.authService.getUser();
+    if (!user) return;
+    const { displayName, photoURL, email } = user;
+    if (!email) return;
+    this.firstName = displayName?.split(' ')[0] || '...';
+    this.avatar = photoURL || `https://ui-avatars.com/api/?name=${email?.split('@')[0]}` || 'assets/icon/avatar.svg';
+  }
 
   getGreeting(): string {
     const now = new Date();

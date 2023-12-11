@@ -1,7 +1,8 @@
 export interface Menu {
   title: string;
   icon: string;
-  path: string;
+  path?: string;
+  onClick?: () => void;
 }
 
 export interface StaticItems {

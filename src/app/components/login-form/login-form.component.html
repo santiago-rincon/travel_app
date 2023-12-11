@@ -15,7 +15,7 @@
       name="email"></ion-input>
     <app-show-hide-password
       class="flex w-full items-center"
-      [showButton]="loginForm.controls['password'].value.length > 0">
+      [showButton]="loginForm.controls['password'].value?.length > 0 || false">
       <ion-input
         #inputFields
         type="password"
@@ -89,7 +89,7 @@
     </svg>
   </button>
   <button
-    (click)="loginWithProvider('apple')"
+    (click)="loginWithProvider('facebook')"
     class="flex items-center justify-center gap-x-1 outline-2 outline outline-gray-500/80 rounded-full py-1 px-3 hover:bg-gray-500/80 hover:text-white">
     <span>Apple</span>
     <svg class="inline" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="32" height="32" viewBox="0 0 50 50">

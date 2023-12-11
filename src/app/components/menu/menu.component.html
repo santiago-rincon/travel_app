@@ -6,9 +6,9 @@
         <ion-buttons slot="end">
           <ion-button (click)="changeTheme()">
             @if (!isDark) {
-              <ion-icon slot="icon-only" name="moon" #toggle></ion-icon>
+              <ion-icon slot="icon-only" name="moon"></ion-icon>
             } @else {
-              <ion-icon slot="icon-only" name="sunny" #toggle></ion-icon>
+              <ion-icon slot="icon-only" name="sunny"></ion-icon>
             }
           </ion-button>
         </ion-buttons>
@@ -23,7 +23,7 @@
             [routerLink]="menuLg.path"
             lines="none"
             class="hidden lg:block"
-            (click)="menuCtrl.toggle('main-menu')">
+            (click)="menuLg?.onClick()">
             <ion-icon slot="start" [name]="menuLg.icon"></ion-icon>
             <ion-label> {{ menuLg.title }} </ion-label>
           </ion-item>
@@ -34,7 +34,7 @@
             routerLinkActive="active"
             [routerLink]="menu.path"
             lines="none"
-            (click)="menuCtrl.toggle('main-menu')">
+            (click)="menu?.onClick()">
             <ion-icon slot="start" [name]="menu.icon"></ion-icon>
             <ion-label> {{ menu.title }} </ion-label>
           </ion-item>

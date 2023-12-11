@@ -19,8 +19,9 @@ import { IonicModule } from '@modules/ionic.module';
 export class TabsComponent {
   menuCtrl = inject(MenuController);
   menus: Menu[] = [
-    { title: 'Inicio', icon: 'home', path: 'home' },
-    { title: 'Viajar', icon: 'car', path: 'travel' },
+    { title: 'Inicio', icon: 'home', path: 'home', onClick: () => null },
+    { title: 'Viajar', icon: 'car', path: 'travel', onClick: () => null },
+    { title: 'Más', icon: 'ellipsis-horizontal', onClick: () => this.onClick() },
   ];
 
   onClick() {

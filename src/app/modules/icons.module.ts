@@ -24,6 +24,7 @@ import {
   eye,
   eyeOff,
   alertCircle,
+  logOut,
 } from 'ionicons/icons';
 import { IonIcon } from '@ionic/angular/standalone';
 
@@ -58,6 +59,7 @@ export class IconsModule {
       eye,
       eyeOff,
       alertCircle,
+      logOut,
     });
   }
 }

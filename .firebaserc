@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "transport-app-26": {
+      "hosting": {
+        "app": [
+          "transport-app-26"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "transport-app-26"
+  }
+}

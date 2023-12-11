@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Output, QueryList, ViewChildren, inject } from '@angular/core';
+import { FirebaseError } from '@angular/fire/app';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ShowHidePasswordComponent } from '@components/show-hide-password/show-hide-password.component';
-import { AlertController } from '@ionic/angular';
-import { IonInput } from '@ionic/angular/standalone';
+import { IonInput, LoadingController } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
-import { type LoginSchemaType, loginSchema } from '@schemas/form-checker';
+import { loginSchema } from '@schemas/form-checker';
+import { AlertsService } from '@services/alerts.service';
+import { AuthFireService } from '@services/auth-fire.service';
 import { ZodError } from 'zod';
 
 @Component({
@@ -19,7 +21,11 @@ export class LoginFormComponent {
   @Output() readonly segment = new EventEmitter<string>();
   @ViewChildren('inputFields') inputFields!: QueryList<IonInput>;
   private formBuilder = inject(FormBuilder);
-  private alertController = inject(AlertController);
+  private alertsService = inject(AlertsService);
+  private authService = inject(AuthFireService);
+  private loadingController = inject(LoadingController);
+  private router = inject(Router);
+  private readonly alertParams = { header: 'Error en el inicio de sesión' };
   loginForm: FormGroup = this.formBuilder.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8)]],
@@ -28,13 +34,13 @@ export class LoginFormComponent {
   submit(form: FormGroup) {
     try {
       const { email, password } = form.controls;
-      const data: LoginSchemaType = loginSchema.parse({ email: email.value, password: password.value });
-      //TODO: Lógica para el inicio de sesión
+      loginSchema.parse({ email: email.value, password: password.value });
+      this.loginwithEmai({ email: email.value, password: password.value });
     } catch (error) {
       if (!(error instanceof ZodError)) {
-        this.presentAlert('Ha ocurrido un error inesperado');
+        this.alertsService.presentAlert({ ...this.alertParams, message: 'Ha ocurrido un error inesperado' });
       } else {
-        this.presentAlert(error.issues[0].message);
+        this.alertsService.presentAlert({ ...this.alertParams, message: error.issues[0].message });
         const errorField = this.loginForm.get(error.issues[0].path[0] as string);
         errorField?.markAsTouched();
         errorField?.setErrors(Validators.required);
@@ -42,16 +48,51 @@ export class LoginFormComponent {
     }
   }
 
-  private async presentAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: 'Error en el formulario',
-      message,
-      buttons: ['Ok'],
+  async loginWithProvider(provider: 'google' | 'facebook') {
+    const loader = await this.loadingController.create({
+      animated: true,
+      message: 'Iniciando sesión...',
+      spinner: 'dots',
     });
-    await alert.present();
+    loader.present();
+    try {
+      const res = await this.authService.signInWithProvider(provider);
+      if (!res) {
+        loader.dismiss();
+        return;
+      }
+      const { user } = res;
+      console.log(user);
+      loader.dismiss();
+      this.router.navigate(['home']);
+    } catch (error) {
+      loader.dismiss();
+      if (error instanceof FirebaseError) {
+        console.log(error.code);
+        const message = this.authService.verifyErrorCodes(error.code);
+        this.alertsService.presentAlert({ ...this.alertParams, message });
+      }
+    }
   }
 
-  loginWithProvider(provider: string) {
-    console.log(provider);
+  private async loginwithEmai({ email, password }: { email: string; password: string }) {
+    const loader = await this.loadingController.create({
+      animated: true,
+      message: 'Iniciando sesión...',
+      spinner: 'dots',
+    });
+    loader.present();
+    try {
+      await this.authService.signInwithEmail(email, password);
+      this.loginForm.reset();
+      loader.dismiss();
+      this.router.navigate(['home']);
+    } catch (error) {
+      loader.dismiss();
+      if (error instanceof FirebaseError) {
+        const message = this.authService.verifyErrorCodes(error.code);
+        this.alertsService.presentAlert({ ...this.alertParams, message });
+      }
+    }
   }
 }
