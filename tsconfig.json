@@ -28,6 +28,7 @@
       "@modules/*": ["app/modules/*"],
       "@mooks/*": ["app/mooks/*"],
       "@guards/*": ["app/guards/*"],
+      "@environments/*": ["environments/*"],
     }
   },
   "angularCompilerOptions": {

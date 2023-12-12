@@ -22,10 +22,13 @@ export class HomeComponent {
   constructor() {
     const user = this.authService.getUser();
     if (!user) return;
-    const { displayName, photoURL, email } = user;
+    const { displayName, email } = user;
     if (!email) return;
     this.firstName = displayName?.split(' ')[0] || '...';
-    this.avatar = photoURL || `https://ui-avatars.com/api/?name=${email?.split('@')[0]}` || 'assets/icon/avatar.svg';
+    this.avatar =
+      `https://ui-avatars.com/api/?name=${displayName}` ||
+      `https://ui-avatars.com/api/?name=${email?.split('@')[0]}` ||
+      'assets/icon/avatar.svg';
   }
 
   getGreeting(): string {

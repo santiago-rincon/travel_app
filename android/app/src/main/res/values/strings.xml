@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">transport-app</string>
+    <string name="app_name">Transport App</string>
     <string name="title_activity_main">transport-app</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">com.transport.app</string>
+    <string name="custom_url_scheme">com.transport.app</string>
+    <string name="server_client_id">1098013190477-ivmafl8qrseesba2ou0dutkc6rv42gsp.apps.googleusercontent.com</string>
 </resources>

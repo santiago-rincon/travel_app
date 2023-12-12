@@ -7,11 +7,15 @@ import {
   User,
   signOut,
   signInWithPopup,
+  signInWithCredential,
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from '@angular/fire/auth';
+import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AlertsService } from '@services/alerts.service';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +24,7 @@ export class AuthFireService {
   private fireAuth = inject(Auth);
   private router = inject(Router);
   private alertsService = inject(AlertsService);
+  private platform = inject(Platform);
   private isLoginSignal = signal(true);
   isLogin = computed(() => this.isLoginSignal());
 
@@ -35,14 +40,34 @@ export class AuthFireService {
     return signInWithEmailAndPassword(this.fireAuth, email, password);
   }
 
-  signInWithProvider(provider: 'google' | 'facebook') {
-    switch (provider) {
-      case 'google':
-        return signInWithPopup(this.fireAuth, new GoogleAuthProvider());
-      case 'facebook':
-        return signInWithPopup(this.fireAuth, new FacebookAuthProvider());
-      default:
-        return null;
+  async signInWithProvider(provider: 'google' | 'facebook') {
+    // console.log(this.platform.platforms());
+    if (this.platform.is('android')) {
+      GoogleAuth.initialize({
+        clientId: environment.serverClientIdGoogleAuth,
+        scopes: ['profile', 'email'],
+        grantOfflineAccess: true,
+      });
+      switch (provider) {
+        case 'google':
+          console.log('case android');
+          const { authentication } = await GoogleAuth.signIn();
+          return signInWithCredential(this.fireAuth, GoogleAuthProvider.credential(authentication.idToken));
+        case 'facebook':
+          return signInWithPopup(this.fireAuth, new FacebookAuthProvider());
+        default:
+          return null;
+      }
+    } else {
+      console.log('web');
+      switch (provider) {
+        case 'google':
+          return signInWithPopup(this.fireAuth, new GoogleAuthProvider());
+        case 'facebook':
+          return signInWithPopup(this.fireAuth, new FacebookAuthProvider());
+        default:
+          return null;
+      }
     }
     //TODO: ver documentación https://firebase.google.com/docs/auth/web/apple?hl=es
   }

@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   imports: [IonicModule, IconsModule, LoginFormComponent, RegisterFormComponent],
 })
 export class LoginComponent implements OnInit {
-  private view = signal('register');
+  private view = signal('login');
   private activedRoute = inject(ActivatedRoute);
   private toastController = inject(ToastController);
   viewSelected = computed(() => this.view());
