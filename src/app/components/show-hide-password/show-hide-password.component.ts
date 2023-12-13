@@ -1,4 +1,4 @@
-import { Component, ContentChild, Input, OnInit } from '@angular/core';
+import { Component, ContentChild, Input } from '@angular/core';
 import { IonInput } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 

@@ -1,12 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { LoginFormComponent } from '@components/login-form/login-form.component';
 import { RegisterFormComponent } from '@components/register-form/register-form.component';
 import { SegmentCustomEvent } from '@ionic/angular';
 import { IonSegment, ToastController } from '@ionic/angular/standalone';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
-import { Subscription } from 'rxjs';
 
 @Component({
   standalone: true,

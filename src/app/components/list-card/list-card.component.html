@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Selecciona el tipo de vehículo</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item button="true" (click)="onClick('car')">
+      <ion-avatar slot="start">
+        <ion-img src="assets/icon/car.webp"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>Carro</h2>
+      </ion-label>
+    </ion-item>
+    <ion-item button="true" (click)="onClick('bicycle')">
+      <ion-avatar slot="start">
+        <ion-img src="assets/icon/motorcycle.webp"></ion-img>
+      </ion-avatar>
+      <ion-label>
+        <h2>Moto</h2>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

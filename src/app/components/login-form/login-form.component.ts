@@ -48,7 +48,7 @@ export class LoginFormComponent {
     }
   }
 
-  async loginWithProvider(provider: 'google' | 'facebook') {
+  async loginWithGoogle() {
     const loader = await this.loadingController.create({
       animated: true,
       message: 'Iniciando sesión...',
@@ -56,19 +56,16 @@ export class LoginFormComponent {
     });
     loader.present();
     try {
-      const res = await this.authService.signInWithProvider(provider);
+      const res = await this.authService.signInWithGoogle();
       if (!res) {
         loader.dismiss();
         return;
       }
-      const { user } = res;
-      console.log(user);
       loader.dismiss();
       this.router.navigate(['home']);
     } catch (error) {
       loader.dismiss();
       if (error instanceof FirebaseError) {
-        console.log(error.code);
         const message = this.authService.verifyErrorCodes(error.code);
         this.alertsService.presentAlert({ ...this.alertParams, message });
       }

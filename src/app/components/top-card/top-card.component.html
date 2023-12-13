@@ -1,12 +1,12 @@
 <div
-  class="w-full py-4 h-auto bg-gradient-to-t from-highland-300 to-highland-700 dark:from-highland-700 dark:to-highland-300 rounded-b-3xl lg:rounded-none">
+  class="flex flex-col justify-evenly w-full h-1/4 bg-gradient-to-t from-highland-300 to-highland-700 dark:from-highland-700 dark:to-highland-300 rounded-b-3xl lg:rounded-none">
   <h1 class="font-bold text-3xl text-center text-gray-200 text-ellipsis mb-2">{{ titleApp }}</h1>
   <div class="flex justify-between sm:px-6">
     <h2 class="font-bold text-2xl ms-8 pt-1 text-gray-300">
       Hola {{ firstName }}
       <i class="block text-lg text-gray-200 font-light">{{ greeting }}</i>
     </h2>
-    <ion-avatar class="me-8 w-[70px] h-auto self-center">
+    <ion-avatar class="me-8 w-[70px] h-auto">
       <img alt="Silhouette of a person's head" [src]="avatar" />
     </ion-avatar>
   </div>

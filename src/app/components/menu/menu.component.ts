@@ -3,11 +3,10 @@ import { Component, Input, OnInit, Renderer2, inject } from '@angular/core';
 import { IconsModule } from '@modules/icons.module';
 import { IonicModule } from '@modules/ionic.module';
 import { Menu } from 'app/schemas/interfaces';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuController } from '@ionic/angular/standalone';
 import { TabsComponent } from '@components/tabs/tabs.component';
 import { AuthFireService } from '@services/auth-fire.service';
-import { AlertsService } from '@services/alerts.service';
 
 @Component({
   standalone: true,
@@ -19,9 +18,7 @@ import { AlertsService } from '@services/alerts.service';
 export class MenuComponent implements OnInit {
   @Input() titleApp = 'Título de la App';
   private menuCtrl = inject(MenuController);
-  private router = inject(Router);
   private authService = inject(AuthFireService);
-  private alertsService = inject(AlertsService);
   private render = inject(Renderer2);
   isDark = false;
   menusLgScreen: Menu[] = [
@@ -31,7 +28,6 @@ export class MenuComponent implements OnInit {
   menus: Menu[] = [
     { title: 'Perfil', icon: 'person-circle', path: 'profile', onClick: () => this.menuCtrl.toggle('main-menu') },
     { title: 'Tarifas', icon: 'cash', path: 'rates', onClick: () => this.menuCtrl.toggle('main-menu') },
-    { title: 'Ajustes', icon: 'settings', path: 'settings', onClick: () => this.menuCtrl.toggle('main-menu') },
     {
       title: 'Información',
       icon: 'information-circle',

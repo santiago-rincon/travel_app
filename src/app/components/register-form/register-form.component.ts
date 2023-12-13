@@ -4,9 +4,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ShowHidePasswordComponent } from '@components/show-hide-password/show-hide-password.component';
 import { LoadingController } from '@ionic/angular/standalone';
 import { IonicModule } from '@modules/ionic.module';
-import { driverRegisterShema, registerShema } from '@schemas/form-checker';
+import { type DriverRegisterSchemaType, driverRegisterShema, registerShema } from '@schemas/form-checker';
 import { AlertsService } from '@services/alerts.service';
 import { AuthFireService } from '@services/auth-fire.service';
+import { FirestoreService } from '@services/firestore.service';
 import { ZodError } from 'zod';
 
 @Component({
@@ -20,6 +21,7 @@ export class RegisterFormComponent {
   private formBuilder = inject(FormBuilder);
   private alertsService = inject(AlertsService);
   private authService = inject(AuthFireService);
+  private firestoreServive = inject(FirestoreService);
   private loadingController = inject(LoadingController);
   private readonly alertParams = { header: 'Error en el registro' };
   registerForm: FormGroup = this.formBuilder.group({
@@ -46,8 +48,9 @@ export class RegisterFormComponent {
       });
       try {
         const { names, lastNames, cc, phoneNumber, vehicle, plates } = form.controls;
+        let driverInfo: DriverRegisterSchemaType | undefined = undefined;
         if (isDriver.value) {
-          driverRegisterShema.parse({
+          driverInfo = driverRegisterShema.parse({
             names: names.value,
             lastNames: lastNames.value,
             cc: cc.value,
@@ -55,8 +58,10 @@ export class RegisterFormComponent {
             vehicle: vehicle.value,
             plates: plates.value,
           });
+          driverInfo.names = driverInfo?.names.replace(/\b\w/g, l => l.toUpperCase());
+          driverInfo.lastNames = driverInfo?.lastNames.replace(/\b\w/g, l => l.toUpperCase());
         }
-        this.registerUser({ email: email.value, password: password.value, isDriver: isDriver.value });
+        this.registerUser({ email: email.value, password: password.value, isDriver: isDriver.value, driverInfo });
       } catch (error) {
         if (!(error instanceof ZodError)) {
           this.alertsService.presentAlert({ ...this.alertParams, message: 'Ha ocurrido un error inesperado' });
@@ -79,7 +84,17 @@ export class RegisterFormComponent {
     }
   }
 
-  private async registerUser({ email, password, isDriver }: { email: string; password: string; isDriver: boolean }) {
+  private async registerUser({
+    email,
+    password,
+    isDriver,
+    driverInfo,
+  }: {
+    email: string;
+    password: string;
+    isDriver: boolean;
+    driverInfo: DriverRegisterSchemaType | undefined;
+  }) {
     const loader = await this.loadingController.create({
       animated: true,
       message: 'Creando cuenta...',
@@ -89,8 +104,8 @@ export class RegisterFormComponent {
     try {
       const { user } = await this.authService.registerWithEmail(email, password);
       await this.authService.sendEmailToVerification(user);
-      if (isDriver) {
-        //TODO Registrar los datos extras en FireStore
+      if (isDriver && driverInfo) {
+        await this.firestoreServive.addDriver({ driverInfo, uid: user.uid });
       }
       this.registerForm.reset();
       loader.dismiss();
@@ -102,6 +117,8 @@ export class RegisterFormComponent {
         this.registerForm.reset();
         const message = this.authService.verifyErrorCodes(error.code);
         this.alertsService.presentAlert({ ...this.alertParams, message });
+      } else {
+        this.alertsService.presentAlert({ ...this.alertParams, message: 'Ha ocurrido un error inesperado' });
       }
     }
   }

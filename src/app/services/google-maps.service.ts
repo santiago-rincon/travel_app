@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 
 declare var google: any;
 declare global {
+  // eslint-disable-next-line no-unused-vars
   interface Window {
     initMap?: () => void;
   }
@@ -21,9 +22,8 @@ export class GoogleMapsService {
   private directionsService!: google.maps.DirectionsService;
   private directionSaved = new BehaviorSubject<google.maps.LatLngLiteral | null>(null);
   @Output() readonly travel: EventEmitter<TravelDirections> = new EventEmitter();
-  // @Output() readonly bounds = new EventEmitter();
   @Output() readonly getPosition = new EventEmitter();
-  @Output() readonly orderService = new EventEmitter();
+  @Output() readonly orderService = new EventEmitter<string>();
   @Output() readonly savedDirection: EventEmitter<google.maps.LatLngLiteral> = new EventEmitter();
 
   init(render: Renderer2): Promise<boolean> {

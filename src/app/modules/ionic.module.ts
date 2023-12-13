@@ -41,6 +41,9 @@ import {
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
+  IonRadio,
+  IonRadioGroup,
+  IonImg,
 } from '@ionic/angular/standalone';
 
 @NgModule({
@@ -87,6 +90,9 @@ import {
     IonSegmentButton,
     IonSelect,
     IonSelectOption,
+    IonRadio,
+    IonRadioGroup,
+    IonImg,
   ],
   exports: [
     IonApp,
@@ -130,6 +136,9 @@ import {
     IonSegmentButton,
     IonSelect,
     IonSelectOption,
+    IonRadio,
+    IonRadioGroup,
+    IonImg,
   ],
 })
 export class IonicModule {}

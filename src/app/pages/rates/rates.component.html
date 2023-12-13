@@ -1,11 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-select
+        justify="start"
+        label="Vehículo:"
+        value="Carro"
+        interface="popover"
+        class="pe-5"
+        (ionChange)="handleChange($event)">
+        <ion-select-option value="Carro">Carro</ion-select-option>
+        <ion-select-option value="Moto">Moto</ion-select-option>
+      </ion-select>
+    </ion-buttons>
+    <ion-title>Tarifas del servicio</ion-title>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Tarifas del servicio</ion-title>
-    </ion-toolbar>
-  </ion-header>
   <app-list
     [title]="'Tarifas para el año ' + year"
     voidData="Error al obtener la lista de precios"
-    [items]="ratesService" />
+    [items]="ratesService()" />
 </ion-content>
