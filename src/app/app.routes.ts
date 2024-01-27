@@ -2,30 +2,40 @@ import { Routes } from '@angular/router';
 import { canActivate } from '@angular/fire/auth-guard';
 import { map } from 'rxjs/operators';
 import { User } from '@angular/fire/auth';
+import { HomeComponent } from '@pages/home/home.component';
 
-const loggedAndEmailVerifidCheck = () =>
+const homeGuard = () =>
   map((user: User | null) => {
     if (!user) return ['login', { error: 'sesion' }];
     if (!user.emailVerified) return ['login', { error: 'email' }];
     return true;
   });
 
-const loggedAndVerified = () =>
+const loginGuard = () =>
   map((user: User | null) => {
     if (user && user.emailVerified) return 'home';
+    return true;
+  });
+
+const travelGuard = () =>
+  map((user: User | null) => {
+    if (!user) return ['login', { error: 'sesion' }];
+    if (!user.emailVerified) return ['login', { error: 'email' }];
+    if (!localStorage.getItem('profile')) return 'home';
     return true;
   });
 
 export const routes: Routes = [
   {
     path: 'home',
-    loadComponent: () => import('@pages/home/home.component').then(c => c.HomeComponent),
-    ...canActivate(loggedAndEmailVerifidCheck),
+    // loadComponent: () => import('@pages/home/home.component').then(c => c.HomeComponent),
+    component: HomeComponent,
+    ...canActivate(homeGuard),
   },
   {
     path: 'travel',
     loadComponent: () => import('@pages/travel/travel.component').then(c => c.TravelComponent),
-    ...canActivate(loggedAndEmailVerifidCheck),
+    ...canActivate(travelGuard),
   },
   {
     path: 'rates',
@@ -34,7 +44,7 @@ export const routes: Routes = [
   {
     path: 'login',
     loadComponent: () => import('@pages/login/login.component').then(c => c.LoginComponent),
-    ...canActivate(loggedAndVerified),
+    ...canActivate(loginGuard),
   },
   {
     path: '',

@@ -1,6 +1,7 @@
 /// <reference types="@types/google.maps" />
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, inject } from '@angular/core';
 import { GoogleMapsService } from '@services/google-maps.service';
+import { Subscription, interval } from 'rxjs';
 
 declare var google: any;
 
@@ -9,7 +10,7 @@ declare var google: any;
   selector: 'app-maps',
   templateUrl: './maps.component.html',
 })
-export class MapsComponent implements OnInit {
+export class MapsComponent implements OnInit, OnDestroy {
   private mapOptions: google.maps.MapOptions = {
     center: { lat: 4.342609, lng: -74.3616 },
     zoom: 18,
@@ -24,6 +25,7 @@ export class MapsComponent implements OnInit {
   private directionsDisplay!: google.maps.DirectionsRenderer;
   private render = inject(Renderer2);
   private googleMapsService = inject(GoogleMapsService);
+  private subUpdatePosition!: Subscription;
   ngOnInit(): void {
     console.log('Maps loading');
     this.loadScript();
@@ -37,7 +39,7 @@ export class MapsComponent implements OnInit {
 
   private async loadScript() {
     try {
-      const res: boolean = await this.googleMapsService.init(this.render);
+      const res = await this.googleMapsService.init(this.render);
       if (res) {
         this.initMap();
       }
@@ -90,11 +92,19 @@ export class MapsComponent implements OnInit {
     this.directionsDisplay = new google.maps.DirectionsRenderer();
     this.directionsDisplay.setMap(this.map);
     this.directionsDisplay.setOptions({ suppressMarkers: true });
+    this.subUpdatePosition = interval(3000).subscribe(async () => {
+      const currentPosition = await this.googleMapsService.currentPosition();
+      this.updatePositionMarkers(this.originMarker, currentPosition, false);
+    });
   }
 
-  private updatePositionMarkers(marker: google.maps.Marker, position: google.maps.LatLngLiteral) {
+  ngOnDestroy() {
+    this.subUpdatePosition.unsubscribe();
+  }
+
+  private updatePositionMarkers(marker: google.maps.Marker, position: google.maps.LatLngLiteral, adapScreen = true) {
     marker.setPosition(position);
-    setTimeout(() => this.adapScreen(), 500);
+    if (adapScreen) setTimeout(() => this.adapScreen(), 500);
   }
 
   private adapScreen() {

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import {
   Auth,
   signInWithEmailAndPassword,
@@ -24,6 +24,7 @@ export class AuthFireService {
   private router = inject(Router);
   private alertsService = inject(AlertsService);
   private platform = inject(Platform);
+  private role = signal<'user' | 'driver' | null>(null);
 
   registerWithEmail(email: string, password: string) {
     return createUserWithEmailAndPassword(this.fireAuth, email, password);
@@ -54,15 +55,24 @@ export class AuthFireService {
   async signOut(): Promise<void> {
     try {
       await signOut(this.fireAuth);
+      this.role.set(null);
       this.router.navigate(['/login']);
       localStorage.removeItem('profile');
     } catch (error) {
-      this.alertsService.presentAlert({ header: 'Ha ocurrido un error', message: 'Intentalo mas tarde' });
+      this.alertsService.presentAlert({ header: 'Ha ocurrido un error', message: 'Intentalo de nuevo' });
     }
   }
 
   getUser() {
     return this.fireAuth.currentUser;
+  }
+
+  get getRole() {
+    return this.role.asReadonly();
+  }
+
+  set setRole(role: 'user' | 'driver' | null) {
+    this.role.set(role);
   }
 
   verifyErrorCodes(code: string): string {

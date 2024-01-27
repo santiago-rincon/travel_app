@@ -1,0 +1,25 @@
+<section class="mt-4 mx-2">
+  <app-interactive-list
+    title="Direcciones guardadas"
+    [items]="directions"
+    voidData="No tienes direcciones guardadas"
+    mainPath="travel" />
+</section>
+<section class="flex flex-col gap-y-8 py-3">
+  <h2 class="font-bold text-lg text-center">Inicía un nuevo viaje</h2>
+  <picture class="flex gap-x-4 justify-evenly">
+    <app-card
+      img="assets/icon/car.webp"
+      alt="A car image"
+      path="/travel"
+      [params]="{ vehicle: 'car' }"
+      title="En carro" />
+    <app-card
+      img="assets/icon/motorcycle.webp"
+      alt="A motorcycle image"
+      path="/travel"
+      [params]="{ vehicle: 'bicycle' }"
+      title="En moto" />
+  </picture>
+  <ion-button expand="block" fill="clear" shape="round" routerLink="/rates"> Ver tarifas </ion-button>
+</section>

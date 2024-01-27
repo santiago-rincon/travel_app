@@ -1,28 +1,13 @@
 <ion-content>
-  <app-top-card [firstName]="firstName" [greeting]="greeting" [avatar]="avatar" [titleApp]="titleApp" />
-  <section class="mt-4 mx-2">
-    <app-interactive-list
-      title="Direcciones guardadas"
-      [items]="directions"
-      voidData="No tienes direcciones guardadas"
-      mainPath="travel" />
-  </section>
-  <section class="flex flex-col gap-y-8 py-3">
-    <h2 class="font-bold text-lg text-center">Iniciar un nuevo viaje</h2>
-    <picture class="flex gap-x-4 justify-evenly">
-      <div class="p-4 w-fit bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800/10 dark:border-white/20">
-        <a routerLink="/travel" [queryParams]="{ vehicle: 'car' }"
-          ><img class="mx-auto" src="assets/icon/car.webp" alt="Car icon"
-        /></a>
-        <span class="block text-center text-base font-bold text-gray-900 dark:text-white">En carro</span>
-      </div>
-      <div class="p-4 w-fit bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800/10 dark:border-white/20">
-        <a routerLink="/travel" [queryParams]="{ vehicle: 'bicycle' }"
-          ><img class="mx-auto" src="assets/icon/motorcycle.webp" alt="Car icon"
-        /></a>
-        <span class="block text-center text-base font-bold text-gray-900 dark:text-white">En moto</span>
-      </div>
-    </picture>
-    <ion-button expand="block" fill="clear" shape="round" routerLink="/rates"> Ver tarifas </ion-button>
-  </section>
+  @defer (when userType() !== null) {
+    <app-top-card [firstName]="firstName" [greeting]="greeting" [avatar]="avatar" [titleApp]="titleApp" />
+    @if (userType() === 'user') {
+      <app-user-home />
+    }
+    @if (userType() === 'driver') {
+      <app-driver-home />
+    }
+  } @loading {
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  }
 </ion-content>
